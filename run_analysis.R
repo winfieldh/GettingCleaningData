@@ -1,6 +1,6 @@
 library(dplyr)
-directory <- "./UCIHAR/"
-
+#directory <- "./UCIHAR/"
+directory <- "C:\\users\\winfield\\Downloads\\UCIHAR\\"
 #read data
 features <- read.table(paste(directory,"features.txt",sep=""))
 subject_test <- read.table(paste(directory,"test/subject_test.txt",sep=""))
@@ -41,5 +41,10 @@ mydata2$Activity_Number[mydata2$Activity_Number == 4] <- "SITTING"
 mydata2$Activity_Number[mydata2$Activity_Number == 5] <- "STANDING"
 mydata2$Activity_Number[mydata2$Activity_Number == 6] <- "LAYING"
 
-#5Independent tidy data set with the average of each variable for each activity and each subject.
+#5 create tidy data set with the average of each variable for each activity and each subject.
 mytidy <- mydata2 %>% group_by(Activity_Number,Subject_ID) %>% summarise_all(mean)
+
+# create excel output file for submission
+library(xlsx)
+mytidydf <-as.data.frame(mytidy)
+write.xlsx2(mytidydf, "mytidy.xlsx", row.names=FALSE)
