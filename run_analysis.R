@@ -1,4 +1,6 @@
 library(dplyr)
+
+#specify where data is
 directory <- "./UCIHAR/"
 
 #read data
@@ -36,14 +38,20 @@ mydata2 <- mydata1[,grep("Name|ID|mean|std",names(mydata1))]
 
 #3. Uses descriptive activity names to name the activities in the data set
 # This loop assigns the activity labels to the Activity Number column 
-for (i in seq_len(nrow(activity_labels))){
-        mydata2$Activity_Name[mydata2$Activity_Name == i] <- activity_labels[i,2]
-}
-
+# for (i in seq_len(nrow(activity_labels))){
+#         mydata2$Activity_Name[mydata2$Activity_Name == i] <- activity_labels[i,2]
+# }
+        mydata2$Activity_Name[mydata2$Activity_Name == 1] <- "WALKING"
+        mydata2$Activity_Name[mydata2$Activity_Name == 2] <- "WALKING_UPSTAIRS"
+        mydata2$Activity_Name[mydata2$Activity_Name == 3] <- "WALKING_DOWNSTAIRS"
+        mydata2$Activity_Name[mydata2$Activity_Name == 4] <- "SITTING"
+        mydata2$Activity_Name[mydata2$Activity_Name == 5] <- "STANDING"
+        mydata2$Activity_Name[mydata2$Activity_Name == 6] <- "LAYING"
+        
 #5 create tidy data set with the average of each variable for each activity and each subject.
 mytidy <- mydata2 %>% group_by(Activity_Name,Subject_ID) %>% summarise_all(mean)
 
 # create excel output file for submission
 library(xlsx)
 mytidydf <-as.data.frame(mytidy)
-write.xlsx2(mytidydf, "mytidy.xlsx", row.names=FALSE)
+write.table(mytidydf, "mytidy.txt", row.names=FALSE)
